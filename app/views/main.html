@@ -1,0 +1,43 @@
+<div class="header-title" style="border-bottom: solid 1px #000000; background: {{headerTitle.color}};">
+    <div class="header-timestamp"><h4 ng-bind="tradingDate"></h4></div>
+    <h4 class="ag-cell-purple-color" ng-bind-html="headerTitle.content"></h4>
+</div>
+<div class="header-title">
+    <h4 style="font-size: 18px;">Các mã cp đáng chú ý nhất phiên</h4>
+</div>
+<div class="grid-area">
+    <div ng-grid="gridMainOptions" ag-grid="gridMainOptions" class="ag-grid-custom ag-fresh" style="width: calc(100% - 70px);"></div>
+    <div id="grid-market-options" class="ag-grid-custom custom ag-fresh" style="width: 70px;"></div>
+</div>
+<!--Graph view-->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{stockInfo}}</h4>
+            </div>
+            <div class="modal-body">
+                <iframe class="iframe-stock" ng-src="{{iSrcTrust}}"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Company view-->
+<div class="modal fade" id="companyModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{companyInfo}}</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-repeat="company in companyDatas">
+                    <h4 ng-bind="company.header"></h4>
+                    <p class="bullet-style" ng-repeat="content in company.content">{{content}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

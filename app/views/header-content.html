@@ -1,0 +1,156 @@
+<div class="s-header" ng-controller="MenuCtrl">
+    <img class="header-bg" src="./images/header-bg.png" />
+    <img class="s-logo" src="./images/s-logo.png" />
+    <div class="s-header-content">
+        <a href="http://hungcanslim.com/gioithieu" class="s-header-btn s-hidden-xs pull-left" >
+            <i class="glyphicon glyphicon-question-sign"></i>
+            Giới thiệu</a>
+        <a href="http://hungcanslim.com/chiase" class="s-header-btn s-hidden-xs pull-left" >
+            <i class="glyphicon glyphicon-question-sign"></i>
+            Kiến thức</a>
+        <a href="http://hungcanslim.com/khachhang" class="s-header-btn s-hidden-xs pull-left" >
+            <i class="glyphicon glyphicon-question-sign"></i>
+            Chính sách khách hàng</a>
+        <button class="s-header-btn s-hidden-xs pull-right" style="width: 162px;" ng-click="signInForm()">
+            <i class="glyphicon glyphicon-user"></i>
+            Đăng nhập</button>
+        <button class="s-header-btn s-hidden-xs pull-right" style="width: 162px;" ng-click="signUpForm()">
+            <i class="glyphicon glyphicon-edit"></i>
+            Đăng ký</button>
+        <a href="http://hungcanslim.com/huongdan" class="s-header-btn s-hidden-xs pull-left" >
+            <i class="glyphicon glyphicon-question-sign"></i>
+            Hướng dẫn</a>
+
+        <h4 class="pull-left s-header-hotline">HOTLINE: 0979.555.689/ SKYPE: CANSLIM_VN</h4>
+        <div class="dropdown s-dropdown pull-right">
+            <button class="s-header-btn s-header-btn-icon s-visible-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <i class="glyphicon glyphicon-th-large"></i>
+            </button>
+
+            <ul class="dropdown-menu s-dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li>
+                    <a ng-click="signInForm()"><i class="glyphicon glyphicon-user"></i> Đăng nhập</a>
+                </li>
+                <li>
+                    <a ng-click="signUpForm()"><i class="glyphicon glyphicon-edit"></i> Đăng ký</a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li>
+                    <a ng-click="openGuideModal($event)"><i class="glyphicon glyphicon-question-sign"></i> Hướng dẫn</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+    .s-header {
+        height: 82px;
+        width: 100%;
+        position: relative;
+    }
+
+    .s-header > .header-bg {
+        height: 100%;
+        width: 100%;
+        max-height: 100%;
+    }
+
+    .s-header > .s-logo {
+        height: 90px;
+        position: absolute;
+        top: 0;
+        left: 50px;
+        box-shadow: 0px 5px 10px 1px #ECECEC;
+        z-index: 999;
+    }
+
+    .s-header > .s-header-content {
+        position: absolute;
+        top: 14px;
+        left: 170px;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        /*padding-left: 170px;*/
+    }
+
+    .s-header > .s-header-content .s-header-hotline {
+        padding-left: 10px;
+        color: #FFFFFF;
+    }
+
+    .s-header .s-header-btn {
+        text-transform: uppercase;
+        border: solid 1px #FFFFFF;
+        color: #FFFFFF;
+        background: #B4389A;
+        border-radius: 10px;
+        padding: 5px 15px;
+        margin: 0 5px;
+        font-size: 12px;
+        font-weight: 500;
+        box-shadow: none;
+        outline: none;
+        line-height: 1.2;
+    }
+
+    .s-header .s-header-btn.s-header-btn-icon {
+        border: none;
+        font-size: 30px;
+        padding: 0px 15px;
+    }
+
+    .s-dropdown {}
+
+    .s-dropdown .s-dropdown-menu {
+        background: #B4389A;
+        border-color: #FFFFFF;
+        margin: 10px 0 0;
+        padding: 0 0;
+    }
+
+    .s-dropdown .s-dropdown-menu li {}
+
+    .s-dropdown .s-dropdown-menu li a {
+        color: #FFFFFF;
+        text-transform: uppercase;
+        padding: 5px 20px;
+    }
+
+    .s-dropdown .s-dropdown-menu li a:hover {
+        background: #FEDAFE;
+        /*color: #126CB6;*/
+        color: #94959A;
+        cursor: pointer;
+    }
+
+    @media(max-width: 400px) {
+        .s-header > .s-logo {
+            left: 10px;
+        }
+    }
+
+    .s-header .s-hidden-xs {
+        display: initial;
+    }
+
+    .s-header .s-visible-xs {
+        display: none;
+    }
+
+    @media(max-width: 867px) {
+        .s-header > .s-logo {
+            left: 10px;
+        }
+        .s-header .s-hidden-xs {
+            display: none;
+        }
+        .s-header .s-visible-xs {
+            display: initial;
+        }
+        .s-header > .s-header-content {
+            padding-left: 0;
+        }
+    }
+</style>
