@@ -1,13 +1,71 @@
-<!doctype html> <html class="no-js"> <head> <meta charset="utf-8"> <title></title> <meta name="description" content=""> <!--<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0">--> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/vendor.0a6e4b96.css"> <link rel="stylesheet" href="styles/main.238bd7a3.css">  <body ng-app="superstockApp" ng-cloak> <!--[if lt IE 7]>
+<!doctype html>
+<html class="no-js">
+
+<head>
+	<meta charset="utf-8">
+	<title>CanslimVN - Superstock</title>
+	<meta name="description" content="">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0">-->
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<!-- build:css(.) styles/vendor.css -->
+	<!-- bower:css -->
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.min.css" />
+	<link rel="stylesheet" href="bower_components/angular-ui-switch/angular-ui-switch.css" />
+	<!-- endbower -->
+	<link rel="stylesheet" href="bower_components/angular-ui-grid/ui-grid.css" />
+	<link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css" />
+	<link rel="stylesheet" href="bower_components\angular-ui-switch\angular-ui-switch.min.css" />
+	<link rel="stylesheet" href="bower_components/ag-grid/ag-grid.css" />
+	<link rel="stylesheet" href="bower_components/ag-grid/theme-fresh.css" />
+
+	<!-- endbuild -->
+	<!-- build:css(.tmp) styles/main.css -->
+	<link rel="stylesheet" href="styles/main.css">
+	<link rel="stylesheet" href="styles/simple-sidebar.css">
+	<!-- endbuild -->
+</head>
+
+<body ng-app="superstockApp" ng-cloak>
+	<!--[if lt IE 7]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
   your browser</a> to improve your experience.</p>
-<![endif]--> <div id="wrapper" class="toggled" ng-controller="FilterCtrl"> <div id="sidebar-wrapper" style="background:#f9f9f9;overflow-x:hidden"> <!--<ul class="sidebar-nav">
+<![endif]-->
+
+<!-- System Modal -->
+<div class="modal fade" id="sysModal" tabindex="-1" role="dialog" aria-labelledby="sysModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="sysModalLabel">Thông báo từ hệ thống</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{system.message}}</p>
+        <p>{{system.error}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+	<div id="wrapper" class="toggled" ng-controller="FilterCtrl">
+		<div id="sidebar-wrapper" style="background:#f9f9f9;overflow-x:hidden">
+			<!--<ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
                         <div ui-slider="{range: true}" min="100" max="500" step="0.01" use-decimals ng-model="demoVals.sliderExample9"></div>
                     </a>
                 </li>
-            </ul>--> <ul class="sidebar-nav"> <li class="sidebar-brand" style="height:15px"> </li> <!--<li class="menu-slider">
+            </ul>-->
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand" style="height:15px">
+				</li>
+				<!--<li class="menu-slider">
                     <div class="row">
                         <div class="col-sm-10 col-xs-10 col-md-10">
                             <form class="navbar-form navbar-left" role="search">
@@ -20,14 +78,535 @@
                             </form>
                         </div>
                     </div>
-                </li>--> <li class="menu-slider"> <div class="row" style="margin-left:0px"> <div class="col-sm-10 col-xs-10 col-md-10 default-filter" style="padding-left:0px"> <form style="display: flex;align-items: center"> <span>Bộ lọc có sẵn</span> <switch id="filterModes" name="filterModes" ng-init="filterModes = false" ng-model="filterModes" class="green" style="margin-left: 10px"></switch> <span style="text-indent: 10px">Bộ lọc cá nhân</span> <!--
+                </li>-->
+				<li class="menu-slider">
+					<div class="row" style="margin-left:0px">
+						<div class="col-sm-10 col-xs-10 col-md-10 default-filter" style="padding-left:0px">
+							<form style="display: flex;align-items: center;">
+								<span>Bộ lọc có sẵn</span>
+								<switch id="filterModes" name="filterModes" ng-init="filterModes = false" ng-model="filterModes" class="green" style="margin-left: 10px;"></switch>
+								<span style="text-indent: 10px;">Bộ lọc cá nhân</span>
+								<!--
                                 <button ng-click="filterHide()" class="btn btn-default btn-sm" style="position: absolute;right: -40px;padding: 0 10px;line-height: initial;border-radius: 50%;">
                                     <span style="font-size: 25px;">×</span>
                                 </button>
-                                --> </form> </div> </div> </li> <li class="menu-slider ng-hide" ng-show="publicFilter"> <div>Bộ lọc có sẵn</div> <div class="row" style="margin-left:0px"> <!--<div class="col-md-3"></div>--> <div class="col-sm-10 col-xs-10 col-md-10 default-filter" style="padding-left:0px"> <multiselect ng-model="filter" ng-change="filterChange()" options="defaultFilter" class="signle-select" selection-limit="1" id-prop="filterName" display-prop="filterName"></multiselect> </div> <div class="col-sm-1 col-xs-1 col-md-1" style="padding-left:10px"> <button type="button" ng-click="filter = null" class="close form-control clear-filter" aria-label="Close"><span aria-hidden="true">&times;</span></button> </div> </div> </li> <li ng-if="individualFilter"> <div>Bộ lọc cá nhân</div> </li> <li class="menu-slider" ng-repeat="item in $root.filterList" ng-if="item.filter && individualFilter"> <div>{{item.headerName}}</div> <div class="row" style="margin-left:0px"> <div class="col-sm-10 col-xs-10 col-md-10" style="padding-left:0px" ng-if="item.filter.typeSearch == 'multiple'"> <multiselect ng-disabled="!filterModes" ng-model="item.filter.term" options="item.filter.selectOptions" show-search="false" id-prop="value" display-prop="label"></multiselect> </div> <div class="col-sm-10 col-xs-10 col-md-10" style="padding-left:0px" ng-if="item.filter.typeSearch != 'multiple'"> <multiselect ng-disabled="!filterModes" ng-model="item.filter.term" options="item.filter.selectOptions" class="signle-select" show-search="false" id-prop="value" display-prop="label" selection-limit="1"></multiselect> </div> <div class="col-sm-1 col-xs-1 col-md-1" style="padding-left:10px"> <button type="button" ng-disabled="!filterModes" ng-click="item.filter.term = null" class="close form-control clear-filter" aria-label="Close"><span aria-hidden="true">&times;</span></button> </div> </div> </li> <li class="menu-slider" ng-repeat="(key, item) in $root.filterList" ng-if="item.filters && individualFilter"> <div>{{item.headerName}}</div> <div class="row" style="margin-left:0px"> <div class="col-md-3 col-sm-3 col-xs-3"> <input type="number" ng-disabled="!filterModes" min="{{item.filters[0].min}}" ng-show="!item.filters[0].bigNum" max="{{item.filters[1].max}}" ng-model="item.filters[0].term" class="form-control" style="padding: 6px 6px"> <input type="number" ng-disabled="!filterModes" id="{{item.field}}" value="{{parseBigNum(item.filters[0].term)}}" class="form-control subTerm" data-model="{{key}}" style="padding: 6px 6px" ng-show="item.filters[0].bigNum"> </div> <div class="col-md-9 col-sm-9 col-xs-9" style="padding-top:12px"> <div ui-slider ng-disabled="!filterModes" min="{{item.filters[0].min}}" id="slide-{{item.field}}" max="{{item.filters[1].max}}" ng-model="item.filters[0].term" style="width:90%" step="{{(item.filters[0].bigNum)?1000000000:1}}"></div> </div> </div> </li> <li class="menu-slider"> <p></p> </li> </ul> </div> <!-- Add your site or application content here --> <div id="header-area" class="header" ng-controller="MenuCtrl" ng-if="$root.user"> <div class="navbar navbar-default" role="navigation"> <div class="container-fluit"> <div class="navbar-header"> <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> <a class="navbar-brand" href="#/">SuperStock</a> </div> <div class="collapse navbar-collapse" id="js-navbar-collapse"> <ul class="nav navbar-nav navbar-left"> <li ng-class="{active:($root.link == 'main')}" ng-if="$root.user && $root.user.account && $root.user.account.active"> <a href="#/"><i class="glyphicon glyphicon-th-large"></i> <span class="menu-item-text item-to-hide">Tổng hợp</span> </a> </li> <li id="full-stock" ng-class="{active:($root.link == 'full')}" ng-if="$root.user && $root.user.account && $root.user.account.active"> <a href="#/full"><i class="glyphicon glyphicon-list-alt"></i> <span class="menu-item-text item-to-hide">Đầy đủ</span> </a> </li> <li id="filter-control" ng-show="$root.link == 'full'" ng-click="filterShow($event)" id="filter" ng-if="$root.user && $root.user.account && $root.user.account.active"> <a href=""><i class="glyphicon glyphicon-filter"></i> <span class="menu-item-text">Bộ lọc</span></a> </li> <li ng-show="$root.link == 'full'" id="search" ng-if="$root.user && $root.user.account && $root.user.account.active"> <div class="row" style="margin-left:15px"> <form class="navbar-form navbar-left" role="search"> <div class="form-group col-xs-10" style="padding:0px"> <input type="text" class="form-control" placeholder="Tìm theo mã" ng-model="$root.searchTerm" ng-enter="$root.search($root.searchTerm)"> </div> <div class="col-xs-2" style="padding:0px"> <button ng-click="$root.search($root.searchTerm)" type="button" class="btn btn-default" style="margin-left: -10px;border-radius: 0px 5px 5px 0px"> <span class="glyphicon glyphicon-search"></span> </button> </div> </form> </div> </li> </ul> <ul class="nav navbar-nav navbar-right"> <!-- Remove Excel download capability to prevent data lost #excel #Excel
-							add $root.link == 'full' && false below	
-							 --> <li ng-show="$root.link == 'full'" ng-click="$root.exportDatasheet($event)" ng-if="$root.user && $root.user.account && $root.user.account.active"> <a href=""><i class="glyphicon glyphicon-download-alt"></i> <span class="menu-item-text item-to-hide">Excel</span></a> </li> <!-- Add link to new blog guide #guide #tutorial #knowledge --> <li> <a href="http://hungcanslim.com/chiase/" target="_blank" class="super-stock-guide"> <i class="glyphicon glyphicon-question-sign"></i> <span class="menu-item-text">Kiến thức</span> </a> </li> <li class="dropdown user-area" ng-if="$root.user"> <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="{{ $root.user.photoURL ? 'cursor: pointer; padding-top: 5px;
-    padding-bottom: 5px;' : 'cursor: pointer;'}}"> <img ng-if="$root.user.photoURL" class="profile-photo" ng-src="{{$root.user.photoURL}}"> <span>{{$root.user.displayName}}</span> <span class="caret"></span> </a> <ul class="dropdown-menu" aria-labelledby="dropdownMenu1"> <li> <a ng-click="changePasswordForm()">Đổi mật khẩu</a> </li> <li> <a ng-click="changeProfileForm()">Thông tin tài khoản</a> </li> <li role="separator" class="divider"></li> <li> <a ng-click="logout()">Thoát</a> </li> </ul> </li> <li class=""> <a href="" ng-if="$root.showUI && !$root.user" ng-click="signInForm()">Đăng nhập</a> </li> <li class=""> <a href="" ng-if="$root.showUI && !$root.user" ng-click="signUpForm()">Đăng ký</a> </li> </ul> </div> </div> </div> </div> <div class="header" ng-if="$root.showUI && !$root.user" ng-include="'./views/header-content.html'"></div> <div id="container-fluit-area" class="container-fluit"> <div class="view-containner"> <div ng-view="" ng-if="$root.user && $root.user.account" style="height: 100%; width: 100%; overflow: auto"></div> <!--<div ng-if="$root.showUI && !$root.user" class="unauthentication-area" ng-cloak>Mời bạn đăng ký tài khoản ở góc phải màn hình,<br>sau đó đăng nhập để có thể sử dụng được bảng giá</div>--> <div ng-if="$root.showUI && !$root.user" ng-include="'./views/home-content.html'" style="height: 100%"></div> </div> </div> <div id="footer-area" class="footer" ng-if="$root.user"> <div class="controls"> </div> <p>Copyright @superstock</p> </div> </div> <!--Modal Areas--> <!--Super stock guide--> <div id="superStockGuideModal" class="modal fade"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button> <h4 id="modal-label">Hướng dẫn</h4> </div> <div class="modal-body"> <iframe src="https://drive.google.com/embeddedfolderview?id=0BwF7UJNTKaLwRk4wLWtuMEtfOHc#grid" width="100%" height="600" frameborder="0"></iframe> </div> </div> </div> </div> <!--Super expired message--> <div id="expiredMessageModal" class="modal fade"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button> <h4 id="modal-label">SuperStock</h4> </div> <div class="modal-body"> <h4> Tài khoản đã bị khóa hoặc hết hạn sử dụng. Vui lòng xem <a target="_blank" href="http://hungcanslim.com/khachhang">hướng dẫn tại đây</a> hoặc liên hệ với 0979.555.689 để được hướng dẫn chi tiết cách sử dụng đầy đủ tính năng, xin cám ơn! </h4> </div> </div> </div> </div> <!--SignIn Form--> <div id="signInModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button> <h4 id="modal-label">Đăng nhập</h4> </div> <div class="modal-body"> <form name="form" role="form" autocomplete="off" novalidate ng-submit="oauthLogin('password')"> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Email</label> </div> <div class="col-sm-10"> <input type="email" name="email" class="form-control input-sm" ng-model="userSignin.email" placeholder="Địa chỉ email" required> <span ng-show="(form.$submitted && !checkEmail)" style="color: red">Email không hợp lệ.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Mật khẩu:</label> </div> <div class="col-sm-10"> <input type="password" name="password" class="form-control input-sm" ng-model="userSignin.password" placeholder="Mật khẩu" required> <span ng-show="(form.$submitted && !checkPassword)" style="color: red">Vui lòng nhập mật khẩu.</span> <span ng-show="form.$submitted && !checkSignIn" style="color: red">Thông tin đăng nhập không đúng.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> </div> <div class="col-sm-10"> <button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px" ng-disabled="disabledButton">Đăng nhập</button> <button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px">Đóng</button> <img ng-if="loading" class="pull-right" style="margin-top: 8px" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> </div> <div class="col-sm-10" style="align-items: center; display: flex"> <img style="width: 65px;height: auto;cursor: pointer; padding-right: 5px" ng-click="oauthLogin('facebook')" src="./images/facebook.png"> <label style="font-weight: normal; margin-bottom: 0"> Đăng nhập với tài khoản facebook?</label> </div> </div> </div> </form> </div> </div> </div> </div> <!--Signup Form--> <div id="signUpModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button> <h4 id="modal-label">Đăng ký</h4> </div> <div class="modal-body"> <form name="form_signup" role="form" autocomplete="off" novalidate ng-submit="oauthSignUp()"> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Họ tên</label> </div> <div class="col-sm-10"> <input type="text" name="full_name" class="form-control input-sm" ng-model="userSignup.fullName" placeholder="Họ tên" required> <span ng-show="(form_signup.$submitted && !checkFullName)" style="color: red">Vui lòng nhập họ tên.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Số điện thoại</label> </div> <div class="col-sm-10"> <input type="text" name="phone_number" class="form-control input-sm" ng-model="userSignup.phoneNumber" placeholder="Số điện thoại" required> <span ng-show="(form_signup.$submitted && !checkPhoneNumber)" style="color: red">Vui lòng nhập số điện thoại.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Email</label> </div> <div class="col-sm-10"> <input type="email" name="email" class="form-control input-sm" ng-model="userSignup.email" placeholder="Địa chỉ email" required> <span ng-show="(form_signup.$submitted && !checkEmail)" style="color: red">Email không hợp lệ.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Mật khẩu:</label> </div> <div class="col-sm-10"> <input type="password" name="password" class="form-control input-sm" ng-model="userSignup.password" placeholder="Mật khẩu" required> <span ng-show="(form_signup.$submitted && !checkPassword)" style="color: red">Vui lòng nhập mật khẩu(Mật khẩu ít nhất 8 ký tự).</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Nhập lại mật khẩu:</label> </div> <div class="col-sm-10"> <input type="password" name="confirm_password" class="form-control input-sm" ng-model="userSignup.confirmPassword" placeholder="Nhập lại mật khẩu" required> <span ng-show="(form_signup.$submitted && !checkConfirmPassword)" style="color: red">Nhập lại mật khẩu không đúng.</span> <span ng-show="(form_signup.$submitted && !checkSignUp)" style="color: red">{{checkSignUpMessage}}</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> </div> <div class="col-sm-10"> <button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px" ng-disabled="disabledButton">Đăng ký</button> <button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px">Đóng</button> <img ng-if="loading" class="pull-right" style="margin-top: 8px" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="> </div> </div> </div> </form> </div> </div> </div> </div> <!--Change password Form--> <div id="changePasswordModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button> <h4 id="modal-label">Thay đổi mật khẩu</h4> </div> <div class="modal-body"> <form name="form_change_pasword" role="form" autocomplete="off" novalidate ng-submit="changePassword()"> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Mật khẩu:</label> </div> <div class="col-sm-10"> <input type="password" name="password" class="form-control input-sm" ng-model="userProfile.password" placeholder="Mật khẩu" required> <span ng-show="(form_change_pasword.$submitted && !checkPassword)" style="color: red">Vui lòng nhập mật khẩu.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Mật khẩu mới:</label> </div> <div class="col-sm-10"> <input type="password" name="new_password" class="form-control input-sm" ng-model="userProfile.newPassword" placeholder="Nhập mật khẩu mới" required> <span ng-show="(form_change_pasword.$submitted && !checkNewPassword)" style="color: red">Nhập mật khẩu mới(Vui lòng nhập mật khẩu(Mật khẩu mới ít nhất 8 ký tự).).</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Nhập lại mật khẩu:</label> </div> <div class="col-sm-10"> <input type="password" name="confirm_new_password" class="form-control input-sm" ng-model="userProfile.confirmNewPassword" placeholder="Nhập lại mật khẩu" required> <span ng-show="(form_change_pasword.$submitted && !checkConfirmNewPassword)" style="color: red">Nhập lại mật khẩu không đúng.</span> <span ng-show="(form_change_pasword.$submitted && !checkChangePassword)" style="color: red">Không thể đổi mật khẩu, vui lòng thử lại.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> </div> <div class="col-sm-10"> <button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px" ng-disabled="disabledButton">Cập nhật</button> <button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px">Đóng</button> <img ng-if="loading" class="pull-right" style="margin-top: 8px" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="> </div> </div> </div> </form> </div> </div> </div> </div> <!--Change Profile Form--> <div id="changeProfileModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button> <h4 id="modal-label">Cập nhật thông tin</h4> </div> <div class="modal-body"> <form name="form_change_profile" role="form" autocomplete="off" novalidate ng-submit="changeProfile()"> <div class="form-group" ng-if="$root.user && $root.user.account"> <div class="row"> <div class="col-sm-2"> <label>Email</label> </div> <div class="col-sm-10"> <input type="text" class="form-control input-sm" disabled value=" {{$root.user.profile.email || $root.user.providerData[0].email }}"> </div> </div> </div> <div class="form-group" ng-if="$root.user && $root.user.account"> <div class="row"> <div class="col-sm-2"> <label>Thời hạn sử dụng</label> </div> <div class="col-sm-10"> <input type="text" class="form-control input-sm" disabled value=" {{$root.user.account.expiredDate | date : 'dd/MM/yyyy'}}"> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Họ tên</label> </div> <div class="col-sm-10"> <input type="text" name="full_name" class="form-control input-sm" ng-model="userProfile.fullName" placeholder="Họ tên" required> <span ng-show="(form_change_profile.$submitted && !checkFullName)" style="color: red">Vui lòng nhập họ tên.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> <label>Số điện thoại</label> </div> <div class="col-sm-10"> <input type="text" name="phone_number" class="form-control input-sm" ng-model="userProfile.phoneNumber" placeholder="Số điện thoại" required> <span ng-show="(form_change_profile.$submitted && !checkPhoneNumber)" style="color: red">Vui lòng nhập số điện thoại.</span> <span ng-show="(form_change_profile.$submitted && !checkChangeProfile)" style="color: red">Không thể cập nhật thông tin tài khoản, vui lòng thử lại.</span> </div> </div> </div> <div class="form-group"> <div class="row"> <div class="col-sm-2"> </div> <div class="col-sm-10"> <button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px" ng-disabled="disabledButton">Cập nhật</button> <button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px">Đóng</button> <img ng-if="loading" class="pull-right" style="margin-top: 8px" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="> </div> </div> </div> </form> </div> </div> </div> </div> <!--Export data sheet loading Form--> <div id="exportProccessing" class="modal fade" data-backdrop="static"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <h4>Đang xử lý...</h4> </div> </div> </div> </div> <!--Modal Areas--> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID --> <script>! function(A, n, g, u, l, a, r) {
+                                -->
+							</form>
+						</div>
+					</div>
+				</li>
+				<li class="menu-slider ng-hide" ng-show="publicFilter">
+					<div>Bộ lọc có sẵn</div>
+					<div class="row" style="margin-left:0px">
+						<!--<div class="col-md-3"></div>-->
+						<div class="col-sm-10 col-xs-10 col-md-10 default-filter" style="padding-left:0px">
+							<multiselect ng-model="filter" ng-change="filterChange()" options="defaultFilter" class="signle-select" selection-limit="1"
+								id-prop="filterName" display-prop="filterName"></multiselect>
+						</div>
+						<div class="col-sm-1 col-xs-1 col-md-1" style="padding-left:10px">
+							<button type="button" ng-click="filter = null" class="close form-control clear-filter" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						</div>
+					</div>
+				</li>
+				<li ng-if="individualFilter">
+					<div>Bộ lọc cá nhân</div>
+				</li>
+				<li class="menu-slider" ng-repeat="item in $root.filterList" ng-if="item.filter && individualFilter">
+					<div>{{item.headerName}}</div>
+					<div class="row" style="margin-left:0px">
+						<div class="col-sm-10 col-xs-10 col-md-10" style="padding-left:0px" ng-if="item.filter.typeSearch == 'multiple'">
+							<multiselect ng-disabled="!filterModes" ng-model="item.filter.term" options="item.filter.selectOptions" show-search="false"
+								id-prop="value" display-prop="label"></multiselect>
+						</div>
+						<div class="col-sm-10 col-xs-10 col-md-10" style="padding-left:0px" ng-if="item.filter.typeSearch != 'multiple'">
+							<multiselect ng-disabled="!filterModes" ng-model="item.filter.term" options="item.filter.selectOptions" class="signle-select"
+								show-search="false" id-prop="value" display-prop="label" selection-limit="1"></multiselect>
+						</div>
+						<div class="col-sm-1 col-xs-1 col-md-1" style="padding-left:10px">
+							<button type="button" ng-disabled="!filterModes" ng-click="item.filter.term = null" class="close form-control  clear-filter"
+								aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						</div>
+					</div>
+				</li>
+				<li class="menu-slider" ng-repeat="(key, item) in $root.filterList" ng-if="item.filters && individualFilter">
+					<div>{{item.headerName}}</div>
+					<div class="row" style="margin-left:0px">
+						<div class="col-md-3 col-sm-3 col-xs-3">
+							<input type="number" ng-disabled="!filterModes" min="{{item.filters[0].min}}" ng-show="!item.filters[0].bigNum" max="{{item.filters[1].max}}"
+								ng-model="item.filters[0].term" class="form-control" style="padding: 6px 6px">
+							<input type="number" ng-disabled="!filterModes" id="{{item.field}}" value="{{parseBigNum(item.filters[0].term)}}" class="form-control subTerm"
+								data-model="{{key}}" style="padding: 6px 6px" ng-show="item.filters[0].bigNum">
+						</div>
+						<div class="col-md-9 col-sm-9 col-xs-9" style="padding-top:12px">
+							<div ui-slider ng-disabled="!filterModes" min="{{item.filters[0].min}}" id="slide-{{item.field}}" max="{{item.filters[1].max}}"
+								ng-model="item.filters[0].term" style="width:90%" step="{{(item.filters[0].bigNum)?1000000000:1}}"></div>
+						</div>
+					</div>
+				</li>
+				<li class="menu-slider">
+					<p></p>
+				</li>
+			</ul>
+		</div>
+		<!-- Add your site or application content here -->
+		<div id="header-area" class="header" ng-controller="MenuCtrl" ng-if="$root.user">
+			<div class="navbar navbar-default" role="navigation">
+				<div class="container-fluit">
+
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+						<a class="navbar-brand" href="#/">SuperStock</a>
+					</div>
+
+					<div class="collapse navbar-collapse" id="js-navbar-collapse">
+						<ul class="nav navbar-nav navbar-left">
+							<li ng-class="{active:($root.link == 'main')}" ng-if="$root.user && $root.user.account && $root.user.account.active">
+								<a href="#/"><i class="glyphicon glyphicon-th-large"></i> <span class="menu-item-text item-to-hide">Tổng hợp</span> </a>
+							</li>
+							<li ng-class="{active:($root.link == 'investment')}" ng-if="$root.user && $root.user.account">
+								<a href="#/investment"><i class="glyphicon glyphicon-signal"></i> <span class="menu-item-text item-to-hide">Cơ bản tốt</span> </a>
+							</li>
+							<li ng-class="{active:($root.link == 'market_low')}" ng-if="$root.user && $root.user.account">
+								<a href="#/market_low"><i class="glyphicon glyphicon-signal"></i> <span class="menu-item-text item-to-hide">Bắt đáy</span> </a>
+							</li>
+							<li id="full-stock" ng-class="{active:($root.link == 'full')}" ng-if="$root.user && $root.user.account && $root.user.account.active">
+								<a href="#/full"><i class="glyphicon glyphicon-list-alt"></i> <span class="menu-item-text item-to-hide">Đầy đủ</span> </a>
+							</li>
+							<li id="personal-portfolio" ng-class="{active:($root.link == 'personal')}" ng-if="$root.user && $root.user.account && $root.user.account.active">
+								<a href="#/personal"><i class="glyphicon glyphicon-list-alt"></i> <span class="menu-item-text item-to-hide">Cá nhân</span> </a>
+							</li>
+							<li id="market-stats" ng-class="{active:($root.link == 'market-stats')}" ng-if="$root.user && $root.user.account && $root.user.account.active">
+								<a href="#/market-stats"><i class="glyphicon glyphicon-stats"></i> <span class="menu-item-text item-to-hide">Thống kê</span> </a>
+							</li>
+							<li id="filter-control" ng-show="$root.link == 'full'" ng-click="filterShow($event)" id="filter" ng-if="$root.user && $root.user.account && $root.user.account.active">
+								<a href=""><i class="glyphicon glyphicon-filter"></i> <span class="menu-item-text">Bộ lọc</span></a>
+							</li>
+							<li ng-show="$root.link == 'full'" id="search" ng-if="$root.user && $root.user.account && $root.user.account.active">
+								<div class="row" style="margin-left:15px">
+									<form class="navbar-form navbar-left" role="search">
+										<div class="form-group col-xs-10" style="padding:0px">
+											<input type="text" class="form-control" placeholder="Tìm theo mã" ng-model="$root.searchTerm" ng-enter="$root.search($root.searchTerm)">
+										</div>
+										<div class="col-xs-2" style="padding:0px">
+											<button ng-click="$root.search($root.searchTerm)" type="button" class="btn btn-default " style="margin-left: -10px;border-radius: 0px 5px 5px 0px; ">
+                                            <span class="glyphicon glyphicon-search "></span>
+                                        </button>
+										</div>
+									</form>
+								</div>
+							</li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<!-- Remove Excel download capability to prevent data lost #excel #Excel
+							add $root.link == 'full' && false below
+							 -->
+							<li ng-show="$root.link == 'full'" ng-click="$root.exportDatasheet($event)" ng-if="$root.user && $root.user.account && $root.user.account.active">
+								<a href=""><i class="glyphicon glyphicon-download-alt"></i> <span class="menu-item-text item-to-hide">Excel</span></a>
+							</li>
+
+							<!-- Add link to new blog guide #guide #tutorial #knowledge -->
+							<li>
+								<a href="http://hungcanslim.com/chiase/" target="_blank" class="super-stock-guide">
+									<i class="glyphicon glyphicon-question-sign"></i>
+									<span class="menu-item-text">Kiến thức</span>
+								</a>
+							</li>
+
+							<li class="dropdown user-area" ng-if="$root.user">
+								<a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="{{ $root.user.photoURL ? 'cursor: pointer; padding-top: 5px;
+    padding-bottom: 5px;' : 'cursor: pointer;'}}">
+									<img ng-if="$root.user.photoURL" class="profile-photo" ng-src="{{$root.user.photoURL}}" />
+									<span>{{$root.user.displayName}}</span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									<li>
+										<a ng-click="changePasswordForm()">Đổi mật khẩu</a>
+									</li>
+									<li>
+										<a ng-click="changeProfileForm()">Thông tin tài khoản</a>
+									</li>
+									<li role="separator" class="divider"></li>
+									<li>
+										<a ng-click="logout()">Thoát</a>
+									</li>
+								</ul>
+							</li>
+							<li class="">
+								<a href="" ng-if="$root.showUI && !$root.user" ng-click="signInForm()">Đăng nhập</a>
+							</li>
+							<li class="">
+								<a href="" ng-if="$root.showUI && !$root.user" ng-click="signUpForm()">Đăng ký</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="header" ng-if="$root.showUI && !$root.user" ng-include="'./views/header-content.html'"></div>
+
+		<div id="container-fluit-area" class="container-fluit">
+			<div class="view-containner">
+				<div ng-view="" ng-if="$root.user && $root.user.account" style="height: 100%; width: 100%; overflow: auto;"></div>
+				<!--<div ng-if="$root.showUI && !$root.user" class="unauthentication-area" ng-cloak>Mời bạn đăng ký tài khoản ở góc phải màn hình,<br>sau đó đăng nhập để có thể sử dụng được bảng giá</div>-->
+				<div ng-if="$root.showUI && !$root.user" ng-include="'./views/home-content.html'" style="height: 100%;"></div>
+			</div>
+		</div>
+
+		<div id="footer-area" class="footer" ng-if="$root.user">
+			<div class="controls">
+
+			</div>
+			<p>Copyright @superstock</p>
+		</div>
+
+	</div>
+	<!--Modal Areas-->
+	<!--Super stock guide-->
+	<!-- Remove embedded google drive docs, guide now in hungcanslim blog
+	<div id="superStockGuideModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h4 id="modal-label">Hướng dẫn</h4>
+				</div>
+				<div class="modal-body">
+					<iframe src="https://drive.google.com/embeddedfolderview?id=0BwF7UJNTKaLwRk4wLWtuMEtfOHc#grid" width="100%" height="600"
+						frameborder="0"></iframe>
+				</div>
+			</div>
+		</div>
+	</div>
+	-->
+
+	<!--Super expired message-->
+	<div id="expiredMessageModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h4 id="modal-label">SuperStock</h4>
+				</div>
+				<div class="modal-body">
+					<h4>
+					Tài khoản chưa được kích hoạt hoặc hết hạn sử dụng. Vui lòng xem <a target="_blank" href="http://hungcanslim.com/khachhang">hướng dẫn tại đây</a> hoặc liên hệ với 0979.555.689 để được hướng dẫn chi tiết cách sử dụng đầy đủ tính năng, xin cám ơn!
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--SignIn Form-->
+	<div id="signInModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h4 id="modal-label">Đăng nhập</h4>
+				</div>
+				<div class="modal-body">
+					<form name="form" role="form" autocomplete="off" novalidate ng-submit="oauthLogin('password')">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Email</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="email" name="email" class="form-control input-sm" ng-model="userSignin.email" placeholder="Địa chỉ email" required/>
+									<span ng-show="(form.$submitted && !checkEmail)" style="color: red;">Email không hợp lệ.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Mật khẩu:</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="password" name="password" class="form-control input-sm" ng-model="userSignin.password" placeholder="Mật khẩu"
+										required/>
+									<span ng-show="(form.$submitted && !checkPassword)" style="color: red;">Vui lòng nhập mật khẩu.</span>
+									<span ng-show="form.$submitted && !checkSignIn" style="color: red;">Thông tin đăng nhập không đúng.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+								</div>
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px;" ng-disabled="disabledButton">Đăng nhập</button>
+									<button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px;">Đóng</button>
+									<img ng-if="loading" class="pull-right" style="margin-top: 8px;" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+								</div>
+								<div class="col-sm-10" style="align-items: center; display: flex;">
+									<img style="width: 65px;height: auto;cursor: pointer; padding-right: 5px;" ng-click="oauthLogin('facebook')" src="./images/facebook.png"
+									/>
+									<label style="font-weight: normal; margin-bottom: 0;"> Đăng nhập với tài khoản facebook?</label>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Signup Form-->
+	<div id="signUpModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h4 id="modal-label">Đăng ký</h4>
+				</div>
+				<div class="modal-body">
+					<form name="form_signup" role="form" autocomplete="off" novalidate ng-submit="oauthSignUp()">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Họ tên</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="text" name="full_name" class="form-control input-sm" ng-model="userSignup.fullName" placeholder="Họ tên" required/>
+									<span ng-show="(form_signup.$submitted && !checkFullName)" style="color: red;">Vui lòng nhập họ tên.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Số điện thoại</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="text" name="phone_number" class="form-control input-sm" ng-model="userSignup.phoneNumber" placeholder="Số điện thoại"
+										required/>
+									<span ng-show="(form_signup.$submitted && !checkPhoneNumber)" style="color: red;">Vui lòng nhập số điện thoại.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Email</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="email" name="email" class="form-control input-sm" ng-model="userSignup.email" placeholder="Địa chỉ email" required/>
+									<span ng-show="(form_signup.$submitted && !checkEmail)" style="color: red;">Email không hợp lệ.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Mật khẩu:</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="password" name="password" class="form-control input-sm" ng-model="userSignup.password" placeholder="Mật khẩu"
+										required/>
+									<span ng-show="(form_signup.$submitted && !checkPassword)" style="color: red;">Vui lòng nhập mật khẩu(Mật khẩu ít nhất 8 ký tự).</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Nhập lại mật khẩu:</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="password" name="confirm_password" class="form-control input-sm" ng-model="userSignup.confirmPassword" placeholder="Nhập lại mật khẩu"
+										required/>
+									<span ng-show="(form_signup.$submitted && !checkConfirmPassword)" style="color: red;">Nhập lại mật khẩu không đúng.</span>
+									<span ng-show="(form_signup.$submitted && !checkSignUp)" style="color: red;">{{checkSignUpMessage}}</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+								</div>
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px;" ng-disabled="disabledButton">Đăng ký</button>
+									<button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px;">Đóng</button>
+									<img ng-if="loading" class="pull-right" style="margin-top: 8px;" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+									/>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Change password Form-->
+	<div id="changePasswordModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h4 id="modal-label">Thay đổi mật khẩu</h4>
+				</div>
+				<div class="modal-body">
+					<form name="form_change_pasword" role="form" autocomplete="off" novalidate ng-submit="changePassword()">
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Mật khẩu:</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="password" name="password" class="form-control input-sm" ng-model="userProfile.password" placeholder="Mật khẩu"
+										required/>
+									<span ng-show="(form_change_pasword.$submitted && !checkPassword)" style="color: red;">Vui lòng nhập mật khẩu.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Mật khẩu mới:</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="password" name="new_password" class="form-control input-sm" ng-model="userProfile.newPassword" placeholder="Nhập mật khẩu mới"
+										required/>
+									<span ng-show="(form_change_pasword.$submitted && !checkNewPassword)" style="color: red;">Nhập mật khẩu mới(Vui lòng nhập mật khẩu(Mật khẩu mới ít nhất 8 ký tự).).</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Nhập lại mật khẩu:</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="password" name="confirm_new_password" class="form-control input-sm" ng-model="userProfile.confirmNewPassword"
+										placeholder="Nhập lại mật khẩu" required/>
+									<span ng-show="(form_change_pasword.$submitted && !checkConfirmNewPassword)" style="color: red;">Nhập lại mật khẩu không đúng.</span>
+									<span ng-show="(form_change_pasword.$submitted && !checkChangePassword)" style="color: red;">Không thể đổi mật khẩu, vui lòng thử lại.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+								</div>
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px;" ng-disabled="disabledButton">Cập nhật</button>
+									<button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px;">Đóng</button>
+									<img ng-if="loading" class="pull-right" style="margin-top: 8px;" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+									/>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Change Profile Form-->
+	<div id="changeProfileModal" class="modal fade" data-backdrop="static" ng-controller="MenuCtrl">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+					<h4 id="modal-label">Cập nhật thông tin</h4>
+				</div>
+				<div class="modal-body">
+					<form name="form_change_profile" role="form" autocomplete="off" novalidate ng-submit="changeProfile()">
+						<div class="form-group" ng-if="$root.user && $root.user.account">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Email</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="text" class="form-control input-sm" disabled="disabled" value=" {{$root.user.profile.email || $root.user.providerData[0].email }}"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" ng-if="$root.user && $root.user.account">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Thời hạn sử dụng</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="text" class="form-control input-sm" disabled="disabled" value=" {{$root.user.account.expiredDate | date : 'dd/MM/yyyy'}}"
+									/>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Họ tên</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="text" name="full_name" class="form-control input-sm" ng-model="userProfile.fullName" placeholder="Họ tên" required/>
+									<span ng-show="(form_change_profile.$submitted && !checkFullName)" style="color: red;">Vui lòng nhập họ tên.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+									<label>Số điện thoại</label>
+								</div>
+								<div class="col-sm-10">
+									<input type="text" name="phone_number" class="form-control input-sm" ng-model="userProfile.phoneNumber" placeholder="Số điện thoại"
+										required/>
+									<span ng-show="(form_change_profile.$submitted && !checkPhoneNumber)" style="color: red;">Vui lòng nhập số điện thoại.</span>
+									<span ng-show="(form_change_profile.$submitted && !checkChangeProfile)" style="color: red;">Không thể cập nhật thông tin tài khoản, vui lòng thử lại.</span>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-2">
+								</div>
+								<div class="col-sm-10">
+									<button type="submit" class="btn btn-primary btn-sm" style="min-width: 90px;" ng-disabled="disabledButton">Cập nhật</button>
+									<button type="button" class="btn btn-sm" data-dismiss="modal" style="min-width: 90px;">Đóng</button>
+									<img ng-if="loading" class="pull-right" style="margin-top: 8px;" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+									/>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Export data sheet loading Form-->
+	<div id="exportProccessing" class="modal fade" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4>Đang xử lý...</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Modal Areas-->
+	<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+	<script>
+        ! function(A, n, g, u, l, a, r) {
             A.GoogleAnalyticsObject = l, A[l] = A[l] || function() {
                     (A[l].q = A[l].q || []).push(arguments)
                 }, A[l].l = +new Date, a = n.createElement(g),
@@ -42,7 +621,43 @@
             ga('send', 'pageview', {
                 nonInteraction: true
             });
-        }, 60 * 1000);</script> <script src="scripts/vendor.80fc12a6.js"></script> <script src="scripts/scripts_ex.09853c5c.js"></script> <script>var config = {
+        }, 60 * 1000);
+    </script>
+
+	<!-- build:js(.) scripts/vendor.js -->
+	<!-- bower:js -->
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/firebase/firebase.js"></script>
+	<script src="bower_components/angularfire/dist/angularfire.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/angular-animate/angular-animate.js"></script>
+	<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.js"></script>
+	<script src="bower_components/angular-route/angular-route.js"></script>
+	<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+	<script src="bower_components/angular-touch/angular-touch.js"></script>
+	<script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+	<script src="bower_components/angular-ui-grid/ui-grid.min.js"></script>
+	<script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+	<script src="bower_components/angular-ui-slider/src/slider.js"></script>
+	<script src="bower_components/angular-bootstrap-multiselect/index.js"></script>
+	<script src="bower_components/angular-ui-switch/angular-ui-switch.js"></script>
+	<script src="bower_components/file-saver/FileSaver.js"></script>
+	<!-- endbower -->
+	<!-- endbuild -->
+
+	<!-- build:js({.tmp,app}) scripts/scripts_ex.js -->
+	<script src="scripts/libs/js-xlsx/cpexcel.js"></script>
+	<script src="scripts/libs/js-xlsx/ods.js"></script>
+	<script src="scripts/libs/js-xlsx/shim.js"></script>
+	<script src="scripts/libs/js-xlsx/xlsx.core.min.js"></script>
+	<script src="scripts/libs/js-xlsx/xlsx.full.min.js"></script>
+	<script src="scripts/libs/ag-grid-enterprise/index.js"></script>
+	<!-- endbuild -->
+
+	<script>
+        var config = {
             apiKey: "AIzaSyA_i_1kEu9yJGgReldWXXtEgm3C2Qfm5s4",
             authDomain: "superstock.firebaseapp.com",
             databaseURL: "https://superstock.firebaseio.com",
@@ -65,4 +680,34 @@
         // };
 
         firebase.initializeApp(config);
-        agGrid.initialiseAgGridWithAngular1(angular);</script> <script src="scripts/scripts.c8630b35.js"></script>  
+        agGrid.initialiseAgGridWithAngular1(angular);
+    </script>
+
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	<script src="scripts/app.js"></script>
+	<script src="scripts/service/factory.js"></script>
+	<script src="scripts/service/utils.js"></script>
+	<script src="scripts/filters/reverse.js"></script>
+	<script src="scripts/angularfire/auth.js"></script>
+	<script src="scripts/angularfire/firebase.ref.js"></script>
+	<script src="scripts/controllers/login.js"></script>
+	<script src="scripts/controllers/account.js"></script>
+	<script src="scripts/controllers/main.js"></script>
+	<script src="scripts/controllers/full-stock.js"></script>
+	<script src="scripts/controllers/market-stats.js"></script>
+	<script src="scripts/controllers/menu.js"></script>
+	<script src="scripts/controllers/filter.js"></script>
+	<script src="scripts/directives/ngShowAuth.js"></script>
+	<script src="scripts/directives/ngHideAuth.js"></script>
+	<script src="scripts/directives/directive.js"></script>
+	<script src="scripts/routes.js"></script>
+	<script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+	<script>
+		Raven.config('https://e063d4c04b9146ca93e78bc609ff644f@sentry.io/215261').install();
+	</script>
+	<!-- endbuild -->
+
+</body>
+
+
+</html>
